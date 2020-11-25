@@ -16,15 +16,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:design:28.0.0-rc02'
+    implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:support-annotations:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -32,4 +33,29 @@ dependencies {
     implementation files('libs/commons-httpclient-3.1.jar')
     implementation files('libs/slf4j-api-1.7.5.jar')
     implementation files('libs/jackrabbit-webdav-2.12.4.jar')
+    implementation files('libs/htmlunit/commons-codec-1.10.jar')
+    implementation files('libs/htmlunit/commons-io-2.6.jar')
+    implementation files('libs/htmlunit/commons-lang3-3.8.jar')
+    implementation files('libs/htmlunit/commons-logging-1.2.jar')
+    implementation files('libs/htmlunit/commons-net-3.6.jar')
+    implementation files('libs/htmlunit/commons-text-1.4.jar')
+    implementation files('libs/htmlunit/htmlunit-2.33.jar')
+    implementation files('libs/htmlunit/htmlunit-core-js-2.33.jar')
+    implementation files('libs/htmlunit/htmlunit-cssparser-1.2.0.jar')
+    implementation files('libs/htmlunit/httpclient-4.5.6.jar')
+    implementation files('libs/htmlunit/httpcore-4.4.10.jar')
+    implementation files('libs/htmlunit/httpmime-4.5.6.jar')
+    implementation files('libs/htmlunit/jetty-client-9.4.12.v20180830.jar')
+    implementation files('libs/htmlunit/jetty-http-9.4.12.v20180830.jar')
+    implementation files('libs/htmlunit/jetty-io-9.4.12.v20180830.jar')
+    implementation files('libs/htmlunit/jetty-util-9.4.12.v20180830.jar')
+    implementation files('libs/htmlunit/jetty-xml-9.4.12.v20180830.jar')
+    implementation files('libs/htmlunit/neko-htmlunit-2.33.jar')
+    implementation files('libs/htmlunit/serializer-2.7.2.jar')
+    implementation files('libs/htmlunit/websocket-api-9.4.12.v20180830.jar')
+    implementation files('libs/htmlunit/websocket-client-9.4.12.v20180830.jar')
+    implementation files('libs/htmlunit/websocket-common-9.4.12.v20180830.jar')
+    implementation files('libs/htmlunit/xalan-2.7.2.jar')
+    implementation files('libs/htmlunit/xercesImpl-2.12.0.jar')
+    implementation files('libs/htmlunit/xml-apis-1.4.01.jar')
 }

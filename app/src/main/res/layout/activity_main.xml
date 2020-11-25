@@ -5,25 +5,51 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/screen_with_logo"
+    android:backgroundTintMode="screen"
     tools:context=".MainActivity"
     tools:openDrawer="left">
 
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <ListView
+        <android.support.design.widget.AppBarLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <include
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:tabMode="scrollable"
+                android:visibility="gone"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/listFileView"/>
-    </FrameLayout>
+            android:backgroundTint="@color/colorForLogin"
+            android:backgroundTintMode="src_over">
+        </FrameLayout>
+
+    </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/nav_view"
-        app:headerLayout="@layout/nav_header"/>
+        android:background="@color/colorPrimary"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_view" />
 </android.support.v4.widget.DrawerLayout>

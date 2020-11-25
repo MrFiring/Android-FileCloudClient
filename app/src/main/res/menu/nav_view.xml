@@ -9,6 +9,17 @@
             android:icon="@android:drawable/ic_menu_gallery"
             android:title="@string/s_files"
             />
+
+        <item
+            android:id="@+id/m_study"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="@string/mystudy"/>
+
+        <item
+            android:id="@+id/m_logout"
+            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:title="@string/logout"/>
+
     </group>
 
 </menu>

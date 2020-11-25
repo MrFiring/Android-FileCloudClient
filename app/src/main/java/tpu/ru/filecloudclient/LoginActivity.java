@@ -26,6 +26,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -37,10 +38,12 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.status.GetRemoteStatusOperation;
+import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 import static android.Manifest.permission.READ_CONTACTS;
 /**
@@ -95,6 +98,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                View v = getCurrentFocus();
+                if(v != null){
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
                 attemptLogin();
             }
         });
@@ -157,32 +165,21 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String login = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+
+        if(!isLoginValid(login)){
+            mEmailView.setError("Неверный логин");
+            return;
+        }
+        if(!isPasswordValid(password)){
+            mPasswordView.setError("Неверный пароль");
+            return;
+        }
 
         boolean cancel = false;
         View focusView = null;
 
-    /*
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-        */
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -191,20 +188,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password, this.getApplicationContext());
+            mAuthTask = new UserLoginTask(login, password, this.getApplicationContext());
             mAuthTask.execute((Void) null);
+
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -240,6 +229,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+
+    private boolean isLoginValid(String login) {
+        //TODO: Replace this with your own logic
+        return login.length() > 2;
+    }
+
+    private boolean isPasswordValid(String password) {
+        //TODO: Replace this with your own logic
+        return password.length() > 4;
     }
 
     @Override
@@ -307,6 +307,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         private final Context mContext;
 
         UserLoginTask(String email, String password, Context context) {
+            //TODO change account
             mEmail = "knb6";
             mPassword = "xl2T4jE7";
             mContext = context;
@@ -324,19 +325,20 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 OwnCloudClient client = OwnCloudClientFactory.createOwnCloudClient(serverUri, mContext, true);
                 OwnCloudHolder.setInstance(client);
 
+
+
                 client.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(mEmail, mPassword));
-               // Toast.makeText(mContext, client.getAccount().getDisplayName(), Toast.LENGTH_LONG).show();
+
+                GetRemoteUserInfoOperation infoOperation = new GetRemoteUserInfoOperation();
+                RemoteOperationResult result = infoOperation.execute(client);
+                if(!result.isSuccess()) {
+                    throw new Exception("Request Error");
+                }
+
+
             } catch (Exception e) {
                 Log.e("TAG", e.toString());
                 return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
             }
 
             // TODO: register the new account here.
@@ -351,7 +353,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             if (success) {
                 Intent main  = new Intent(this.mContext, MainActivity.class);
                 startActivity(main);
-                finishActivity(0);
+                Toast.makeText(mContext, "still here", Toast.LENGTH_SHORT).show();
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

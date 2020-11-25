@@ -1,5 +1,7 @@
 package tpu.ru.filecloudclient.common;
 
+import java.util.regex.Pattern;
+
 public class PathController {
     private String mPath;
 
@@ -13,12 +15,28 @@ public class PathController {
         return mPath;
     }
 
+    public String getCurrentDirName(){
+        if(mPath.length() > 1) {
+            String[] dirs = mPath.split(Pattern.quote("/"));
+
+
+            return dirs[dirs.length - 1];
+        }
+        return null;
+    }
+
     public void setPath(String mPath) {
         this.mPath = mPath;
     }
 
     public String Backward(){
+        if(mPath.length() > 1)
         mPath = mPath.substring(0, mPath.lastIndexOf('/'));
+        else {
+            mPath = "";
+            return null;
+        }
+
         return mPath;
     }
 
